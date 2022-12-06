@@ -5,6 +5,13 @@ definitions:
       message:
         type: string
     type: object
+  main.SendMessageBatch:
+    properties:
+      messages:
+        items:
+          type: string
+        type: array
+    type: object
 info:
   contact:
     email: jailton.junior94@outlook.com
@@ -45,6 +52,36 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/main.SendMessage'
+      summary: Send Message
+      tags:
+      - Messages
+  /messages-batch:
+    post:
+      consumes:
+      - application/json
+      description: Send Message
+      parameters:
+      - description: send message request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.SendMessageBatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.SendMessageBatch'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.SendMessageBatch'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.SendMessageBatch'
       summary: Send Message
       tags:
       - Messages

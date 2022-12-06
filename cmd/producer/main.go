@@ -35,11 +35,16 @@ func main() {
 	router.Use(middleware.Heartbeat("/health"))
 
 	router.Post("/messages", SendMessageHandle)
+	router.Post("/messages-batch", SendMessageBatchHandle)
 
 	router.Get("/docs/*", swagger.Handler(swagger.URL("http://localhost:8000/docs/doc.json")))
 	fmt.Printf("🚀 API is running on http://localhost:%v", "8000")
 	http.ListenAndServe(":8000", router)
 
+}
+
+type SendMessage struct {
+	Message string `json:"message"`
 }
 
 // Send Message godoc
@@ -78,6 +83,42 @@ func SendMessageHandle(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
-type SendMessage struct {
-	Message string `json:"message"`
+type SendMessageBatch struct {
+	Messages []string `json:"messages"`
+}
+
+// Send Message godoc
+// @Summary     Send Message
+// @Description Send Message
+// @Tags        Messages
+// @Accept      json
+// @Produce     json
+// @Param       request body     SendMessageBatch true "send message request"
+// @Success     200     {object} SendMessageBatch
+// @Failure     404     {object} SendMessageBatch
+// @Failure     500     {object} SendMessageBatch
+// @Router      /messages-batch [post]
+func SendMessageBatchHandle(w http.ResponseWriter, r *http.Request) {
+	var sendMessage SendMessageBatch
+	err := json.NewDecoder(r.Body).Decode(&sendMessage)
+	if err != nil {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.TODO(), 60*time.Second)
+	defer cancel()
+
+	serviceBus := bus.NewServiceBus()
+	defer serviceBus.Client.Close(ctx)
+
+	err = serviceBus.PublishBatch(ctx, "keda-poc-queue", sendMessage.Messages)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Contenty-Type", "application/json")
+	json.NewEncoder(w).Encode(SendMessage{Message: "Send message successfully"})
+	w.WriteHeader(http.StatusAccepted)
 }

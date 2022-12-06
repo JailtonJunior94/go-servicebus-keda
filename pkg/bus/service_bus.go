@@ -11,7 +11,7 @@ type ServiceBus struct {
 }
 
 func NewServiceBus() *ServiceBus {
-	connectionString := "Endpoint=sb://keda-poc-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=gQvhnw2pOfYcPwmWI5PP/9t9koMyMeTnEgA6QzE7QNg="
+	connectionString := ""
 	client, err := azservicebus.NewClientFromConnectionString(connectionString, nil)
 
 	if err != nil {
@@ -31,6 +31,27 @@ func (s *ServiceBus) Publish(ctx context.Context, queueOrTopic, message string) 
 	return sender.SendMessage(ctx, &azservicebus.Message{
 		Body: []byte(message),
 	}, nil)
+}
+
+func (s *ServiceBus) PublishBatch(ctx context.Context, queueOrTopic string, messages []string) error {
+	sender, err := s.Client.NewSender(queueOrTopic, nil)
+	if err != nil {
+		return err
+	}
+	defer sender.Close(ctx)
+
+	batch, err := sender.NewMessageBatch(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	for _, message := range messages {
+		batch.AddMessage(&azservicebus.Message{
+			Body: []byte(message),
+		}, nil)
+	}
+
+	return sender.SendMessageBatch(ctx, batch, nil)
 }
 
 func (s *ServiceBus) ConsumerFromQueue(ctx context.Context, queueName string, count int, out chan<- []byte) {
