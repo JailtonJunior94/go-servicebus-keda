@@ -1,0 +1,77 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Producer API",
+        "title": "Producer API",
+        "termsOfService": "http://swagger.io/terms",
+        "contact": {
+            "name": "Jailton Junior",
+            "url": "http://jailton.junior.net",
+            "email": "jailton.junior94@outlook.com"
+        },
+        "license": {
+            "name": "Jailton Junior License",
+            "url": "http://jailton.junior.net"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/messages": {
+            "post": {
+                "description": "Send Message",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Send Message",
+                "parameters": [
+                    {
+                        "description": "send message request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.SendMessage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.SendMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/main.SendMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.SendMessage"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.SendMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

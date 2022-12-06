@@ -1,0 +1,51 @@
+basePath: /
+definitions:
+  main.SendMessage:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: jailton.junior94@outlook.com
+    name: Jailton Junior
+    url: http://jailton.junior.net
+  description: Producer API
+  license:
+    name: Jailton Junior License
+    url: http://jailton.junior.net
+  termsOfService: http://swagger.io/terms
+  title: Producer API
+  version: "1.0"
+paths:
+  /messages:
+    post:
+      consumes:
+      - application/json
+      description: Send Message
+      parameters:
+      - description: send message request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.SendMessage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.SendMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.SendMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.SendMessage'
+      summary: Send Message
+      tags:
+      - Messages
+swagger: "2.0"

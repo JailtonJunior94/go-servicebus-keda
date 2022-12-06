@@ -3,14 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/jailtonjunior94/go-servicebus-keda/pkg/bus"
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.TODO(), 60*time.Second)
-	defer cancel()
+	ctx := context.TODO()
 
 	serviceBus := bus.NewServiceBus()
 	defer serviceBus.Client.Close(ctx)

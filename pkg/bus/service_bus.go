@@ -51,7 +51,6 @@ func (s *ServiceBus) ConsumerFromQueue(ctx context.Context, queueName string, co
 			if err := receiver.CompleteMessage(ctx, message, nil); err != nil {
 				panic(err)
 			}
-			continue
 		}
 	}
 }

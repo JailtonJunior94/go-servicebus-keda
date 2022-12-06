@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  producer:
+    container_name: producer
+    image: producer
+    build:
+      context: ..
+      dockerfile: cmd/producer/Dockerfile
+    ports:
+      - "8000:8000"
+
+  consumer:
+    container_name: consumer
+    image: consumer
+    build:
+      context: ..
+      dockerfile: cmd/consumer/Dockerfile
