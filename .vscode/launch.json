@@ -7,7 +7,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/consumer/main.go",
-            "env": {},
+            "env": {
+                "CONNECTION_STRING_SB": ""
+            },
             "args": []
         },
         {
@@ -16,7 +18,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/producer/main.go",
-            "env": {},
+            "env": {
+                "CONNECTION_STRING_SB": ""
+            },
             "args": []
         }
     ]

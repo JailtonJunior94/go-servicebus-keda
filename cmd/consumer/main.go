@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/jailtonjunior94/go-servicebus-keda/pkg/bus"
 )
@@ -10,7 +11,7 @@ import (
 func main() {
 	ctx := context.TODO()
 
-	serviceBus := bus.NewServiceBus()
+	serviceBus := bus.NewServiceBus(os.Getenv("CONNECTION_STRING_SB"))
 	defer serviceBus.Client.Close(ctx)
 
 	messages := make(chan []byte)

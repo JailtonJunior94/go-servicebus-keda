@@ -24,7 +24,13 @@ spec:
     spec:
       containers:
       - name: consumer
-        image: jailtonjunior/consumer:v1
+        image: jailtonjunior/consumer:v2
+        env:
+        - name: CONNECTION_STRING_SB
+          valueFrom:
+            secretKeyRef:
+              name: service-bus-connection-secret
+              key: ServiceBusAzure
         resources:
           requests:
             cpu: 15m
@@ -32,3 +38,4 @@ spec:
           limits:
             cpu: 30m
             memory: "64Mi"
+

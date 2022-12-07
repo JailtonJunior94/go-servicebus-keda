@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	_ "github.com/jailtonjunior94/go-servicebus-keda/docs"
@@ -69,7 +70,7 @@ func SendMessageHandle(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.TODO(), 60*time.Second)
 	defer cancel()
 
-	serviceBus := bus.NewServiceBus()
+	serviceBus := bus.NewServiceBus(os.Getenv("CONNECTION_STRING_SB"))
 	defer serviceBus.Client.Close(ctx)
 
 	err = serviceBus.Publish(ctx, "keda-poc-queue", sendMessage.Message)
@@ -109,7 +110,7 @@ func SendMessageBatchHandle(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.TODO(), 60*time.Second)
 	defer cancel()
 
-	serviceBus := bus.NewServiceBus()
+	serviceBus := bus.NewServiceBus(os.Getenv("CONNECTION_STRING_SB"))
 	defer serviceBus.Client.Close(ctx)
 
 	err = serviceBus.PublishBatch(ctx, "keda-poc-queue", sendMessage.Messages)

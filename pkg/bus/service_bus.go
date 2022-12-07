@@ -10,14 +10,11 @@ type ServiceBus struct {
 	Client *azservicebus.Client
 }
 
-func NewServiceBus() *ServiceBus {
-	connectionString := ""
+func NewServiceBus(connectionString string) *ServiceBus {
 	client, err := azservicebus.NewClientFromConnectionString(connectionString, nil)
-
 	if err != nil {
 		panic(err)
 	}
-
 	return &ServiceBus{Client: client}
 }
 

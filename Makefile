@@ -7,3 +7,11 @@ start:
 
 stop:
 	docker-compose -f deployment/docker-compose.yml down
+
+create-infra:
+	cd deployment/iac && \
+		terraform apply --auto-approve
+
+destroy-infra:
+	cd deployment/iac && \
+		terraform destroy --auto-approve
